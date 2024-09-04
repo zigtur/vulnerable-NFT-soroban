@@ -68,8 +68,6 @@ impl NFTokenTrait for NFToken {
         env.storage()
             .instance()
             .extend_ttl(INSTANCE_LIFETIME_THRESHOLD, INSTANCE_BUMP_AMOUNT);
-        let admin = read_administrator(&env);
-        admin.require_auth();
 
         let from = read_owner(&env, id);
         write_owner(&env, id, None);
@@ -155,8 +153,6 @@ impl NFTokenTrait for NFToken {
         if read_approval_all(&env, from.clone(), spender.clone())
             || spender == read_approval(&env, id)
         {
-            write_approval(&env, id, None);
-
             write_owner(&env, id, Some(to.clone()));
 
             event::transfer(&env, from, to, id);
